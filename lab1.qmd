@@ -1,0 +1,97 @@
+---
+title: "Lab 1"
+author: "Scott LaCombe"
+format: html
+editor: visual
+---
+
+# Introduction
+
+For this lab you will be estimating a simple regression to predict whether greater income is associated with higher levels of happiness. I have provided a sample dataset (income_data.csv) that is made up data for practice. As always, you first need to load packages. Load rio (or whatever package you use for loading data), tidyverse, and ggplot2. The lab must be written in RMarkdown and turned in as a .RMD and .HTML (or pdf) file. This is designed to be finished during class time, but you have until Friday, Feb 4th (11:59 PM). 
+
+I've included some sample code but removed some variable/object names to force you to customize it to work.  Make sure you turn in your own, unique lab assignment, but you are encouraged to collaborate in groups to work on the lab.  Remember all code should be in chunks, sections labeled with headings, and text written in white space. 
+
+```{r, message=F, warning=F}
+library(rio)
+library(tidyverse)
+library(ggplot2)
+```
+
+
+## Load Packages and Data
+In a chunk, load the packages and import the income_data.csv dataset. Be sure to assign that dataset to some object name. Remember, for the import command to work you must have your RMarkdown file/project in the same location as the data. For the purposes of this exercise assume this is a random and representative sample of American adults, so we will ignore the randomness and independent assumptions for the time being. 
+
+```{r, eval=F}
+OBJECTNAME <- import("DATASETNAME.csv")
+```
+
+
+## How many observations are in the data? How many variables?
+
+## Construct a scatter of Income and Happiness 
+
+I suggest you look at the sample code from Tuesday's lecture. You will need to use the ggplot subcommands to tell R what dataset to use, tell it to make the x-axis income and y-axis happiness, and add the command geom_point to tell R to make it a scatter plot. For now, no need to change axis labels/customize the figure (although it's great practice!). In addition to producing the scatter plot, tell me if the two variables are continuous/quantitative or categorical. Are the variables appropriate for use in a regression? Does there appear to be a relationship between money and happiness? 
+
+
+```{r, eval=F}
+ggplot(OBJECTNAME, aes(IV, DV))+geom_point()
+```
+
+## Condition 1- Linearity
+From the scatter plot, does the relationship appear linear? Is there any other way you could test for linearity using graphs (you don't have to do it yet, just tell me what that method could be)?
+
+
+## Estimate a linear model using income to predict happiness
+
+Estimate the model and show the regression table using "summary(MODELNAME)". Don't forget to assign the model to an object. Interpret the model. What does the intercept refer to? What does the coefficient for your independent variable mean? Is the relationsip significant, and how do you know?
+```{r, eval=F}
+MODELNAME <- lm(DV~IV, data=OBJECTNAME)
+
+```
+
+
+## Regression Diagnostics
+
+For each of the following diagnostics, interpret the graphs you produce using your own words, including telling me if they indicate we have violated a condition for regression. 
+
+
+
+
+
+
+### Normally Distributed Residuals with a mean of 0
+
+The sample code below is from lecture and estimates a linear model predicting arrival delays with departure delays. It then extracts the residuals from the model and saves it to a new object. Finally, it creates a histogram of the residuals. Customize this code to work for your data/model (will need to change names of both). Are the errors normally distributed? Take a summyar of the residual variable (it's called .resid in the dataframe you create). What is the mean? Is this what you expected? How close is the median to the mean?
+
+```{r, eval=F}
+## Estimate linear model
+ lm_delay <- lm(arr_delay~dep_delay, data=airline_data)
+
+### extract components of the model such as residuals and fitted values
+ resid_data <- augment(lm_delay)
+
+ ### take a summary of the residuals
+ summary(resid_data$RESIDUALVARIABLE)
+
+ ## Histogram of Residuals- binwidth refers to how wide you want each bar to be- you can change
+  ggplot(resid_data, aes(x=.resid)) +
+  geom_histogram(binwidth=1) +xlab("Residual")
+ 
+```
+
+
+### Constant Variance/Homoskedasticity
+
+For the last diagnostic I want you to create a scatter plot that plots the residuals on the y-axis and fitted values on the X axis. Do you see any concerning patterns such as non-constant variance, or any other patterns that may indicate non-linearity?
+```{r, eval=F}
+ # Scatter plot between predicted values and residuals
+# As a reminder you need to use the object you created from extracting information from your model
+# You will need to change the variable names to match what is in the object you created
+ ggplot(resid_data, aes(x=FITTED_VALUES, y=RESIDUALS)) +
+  geom_point()
+```
+
+
+## Conclusion
+
+Given the diagnostics you did above, do you think a linear model was appropriate for this data? Why or why not? Can we conclude that there is an association between income and happinness? 
